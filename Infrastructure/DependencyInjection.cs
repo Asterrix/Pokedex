@@ -14,5 +14,6 @@ public static class DependencyInjection
     private static void AddPersistence(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<IGenerationRepository, GenerationRepository>();
+        serviceCollection.AddSingleton<ISpecieRepository, SpecieRepository>();
     }
 }

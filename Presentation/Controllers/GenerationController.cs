@@ -50,7 +50,7 @@ public class GenerationController : ControllerBase
             throw new Exception();
         }
 
-        return Ok($"{command.Name.Trim()} was successfully updated to a new value of \"{command.NewValue.Trim()}\"");
+        return Ok($"{command.Name.Trim()} was successfully updated to a new value of \"{command.NewValue.Trim()}\".");
     }
 
     [HttpDelete]

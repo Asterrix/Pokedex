@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Application;
 using Application.Contracts;
 using Newtonsoft.Json;
 using Presentation.Error;

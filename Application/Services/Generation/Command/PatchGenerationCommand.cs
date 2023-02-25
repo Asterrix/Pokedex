@@ -59,6 +59,6 @@ public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationComm
 
         #endregion
 
-        return await _generationRepository.PatchGenerationAsync(generation, request.Name.Trim());
+        return await _generationRepository.PatchGenerationAsync(generation, request.NewValue.Trim());
     }
 }

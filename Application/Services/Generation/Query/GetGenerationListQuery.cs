@@ -17,7 +17,6 @@ public class GetGenerationListQueryHandler : IRequestHandler<GetGenerationListQu
     public async Task<List<Models.Generation>> Handle(GetGenerationListQuery request, CancellationToken cancellationToken)
     {
         var result = await _generationRepository.GetAllGenerationsAsync();
-
         return result;
     }
 }

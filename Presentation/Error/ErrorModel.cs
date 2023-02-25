@@ -7,5 +7,5 @@ public class ErrorModel
     public int Status { get; set; }
     public string Detail { get; set; }
     public string Instance { get; set; }
-    public List<string> ErrorList { get; set; } = new List<string>();
+    public List<string> ErrorList { get; set; } = new();
 }
