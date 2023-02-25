@@ -15,5 +15,6 @@ public static class DependencyInjection
     {
         serviceCollection.AddSingleton<IGenerationRepository, GenerationRepository>();
         serviceCollection.AddSingleton<ISpecieRepository, SpecieRepository>();
+        serviceCollection.AddSingleton<ICategoryRepository, CategoryRepository>();
     }
 }
