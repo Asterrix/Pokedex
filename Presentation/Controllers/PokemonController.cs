@@ -47,9 +47,9 @@ public class PokemonController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<IActionResult> PatchPokemonAsync(string Name, [FromBody] JsonPatchDocument<Pokemon> jsonPatchDocument)
+    public async Task<IActionResult> PatchPokemonAsync(string name, [FromBody] JsonPatchDocument<Pokemon> jsonPatchDocument)
     {
-        var command = new PatchPokemonCommand(Name, jsonPatchDocument);
+        var command = new PatchPokemonCommand(name, jsonPatchDocument);
         var result = await _sender.Send(command);
         if (result is false)
         {
@@ -69,6 +69,7 @@ public class PokemonController : ControllerBase
             throw new Exception();
         }
 
-        return Ok("Pokemon was deleted successfully.");
+        var json = JsonConvert.SerializeObject("Pokemon was deleted successfully.");
+        return Ok(json);
     }
 }

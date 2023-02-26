@@ -1,6 +1,8 @@
-﻿using Application.Services.Category.Command;
+﻿using Application.Models;
+using Application.Services.Category.Command;
 using Application.Services.Category.Query;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -45,17 +47,16 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<IActionResult> PatchCategoryAsync([FromBody] PatchCategoryCommand command)
+    public async Task<IActionResult> PatchCategoryAsync(string name, [FromBody] JsonPatchDocument<Category> jsonPatchDocument)
     {
+        var command = new PatchCategoryCommand(name, jsonPatchDocument);
         var result = await _sender.Send(command);
         if (result is false)
         {
             throw new Exception();
         }
 
-        var json = JsonConvert.SerializeObject(
-            $"{command.CategoryName.Trim()} was successfully updated to a new value of \"{command.NewName.Trim()}\"."
-        );
+        var json = JsonConvert.SerializeObject("Category was updated successfully.");
         return Ok(json);
     }
 

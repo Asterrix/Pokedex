@@ -1,6 +1,8 @@
-﻿using Application.Services.Generation.Command;
+﻿using Application.Models;
+using Application.Services.Generation.Command;
 using Application.Services.Generation.Query;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -45,17 +47,16 @@ public class GenerationController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<IActionResult> PatchGenerationAsync([FromBody] PatchGenerationCommand command)
+    public async Task<IActionResult> PatchGenerationAsync(string name, [FromBody] JsonPatchDocument<Generation> patchDocument)
     {
+        var command = new PatchGenerationCommand(name, patchDocument);
         var result = await _sender.Send(command);
         if (result is false)
         {
             throw new Exception();
         }
 
-        var json = JsonConvert.SerializeObject(
-            $"{command.GenerationName.Trim()} was successfully updated to a new value of \"{command.NewValue.Trim()}\"."
-        );
+        var json = JsonConvert.SerializeObject("Generation was updated successfully.");
         return Ok(json);
     }
 

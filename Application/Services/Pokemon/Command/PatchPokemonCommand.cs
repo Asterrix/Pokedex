@@ -25,11 +25,24 @@ public class PatchPokemonCommandHandler : IRequestHandler<PatchPokemonCommand, b
         {
             throw new NotFoundException($"Pokemon \"{request.Name.Trim()}\" does not exist.");
         }
+
         request.PatchDocument.ApplyTo(pokemon);
 
+        /* Trim string object values */
+        pokemon.Name = pokemon.Name.Trim();
+        pokemon.Description = pokemon.Description.Trim();
+        pokemon.Portrait = pokemon.Portrait.Trim();
+
+        var checkNewValue = await _pokemonRepository.GetPokemonAsync(pokemon.Name, cancellationToken);
+        if (checkNewValue is not null)
+        {
+            throw new InvalidOperationException(
+                $"There already exists a pokemon with the name of {pokemon.Name.Trim()}"
+            );
+        }
+
         await _validator.ValidateAndThrowAsync(pokemon, cancellationToken);
-        
-        var result = await _pokemonRepository.PatchPokemonAsync(pokemon, cancellationToken);
-        return result;
+
+        return await _pokemonRepository.PatchPokemonAsync(pokemon, cancellationToken);
     }
 }

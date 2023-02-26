@@ -3,12 +3,12 @@ using FluentValidation;
 
 namespace Application.Validators;
 
-public class StatisticValidator : AbstractValidator<Statistic>
+public class ValidateStatistic : AbstractValidator<Statistic>
 {
     private const int MinStatValue = 1;
     private const int MaxStatValue = 800;
     
-    public StatisticValidator()
+    public ValidateStatistic()
     {
         PokemonStatisticValidator();
     }

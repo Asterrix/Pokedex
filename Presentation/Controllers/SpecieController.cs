@@ -1,7 +1,10 @@
-﻿using Application.Services.Specie.Command;
+﻿using Application.Models;
+using Application.Services.Specie.Command;
 using Application.Services.Specie.Query;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Presentation.Controllers;
 
@@ -44,15 +47,17 @@ public class SpecieController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<IActionResult> PatchSpecieAsync([FromBody] PatchSpecieCommand command)
+    public async Task<IActionResult> PatchSpecieAsync(string name, [FromBody] JsonPatchDocument<Specie>patchDocument)
     {
+        var command = new PatchSpecieCommand(name, patchDocument);
         var result = await _sender.Send(command);
         if (result is false)
         {
             throw new Exception();
         }
 
-        return Ok($"{command.Name.Trim()} was successfully updated to a new value of \"{command.NewValue.Trim()}\".");
+        var json = JsonConvert.SerializeObject("Specie was updated successfully.");
+        return Ok(json);
     }
 
     [HttpDelete]
@@ -64,6 +69,7 @@ public class SpecieController : ControllerBase
             throw new Exception();
         }
 
-        return Ok("Specie was deleted successfully.");
+        var json = JsonConvert.SerializeObject("Specie was deleted successfully.");
+        return Ok(json);
     }
 }

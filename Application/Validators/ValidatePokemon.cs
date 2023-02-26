@@ -27,7 +27,7 @@ public class PokemonValidator : AbstractValidator<Pokemon>
         PokemonHeightValidator();
         PokemonWeightValidator();
         PokemonDescriptionValidator();
-        RuleFor(x => x.Statistic).SetValidator(new StatisticValidator());
+        RuleFor(x => x.Statistic).SetValidator(new ValidateStatistic());
     }
 
     private void PokemonNameValidator()

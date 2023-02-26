@@ -1,10 +1,11 @@
 ﻿using Application.Contracts;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Application.Services.Generation.Command;
 
-public record PatchGenerationCommand(string GenerationName, string NewValue) : IRequest<bool>;
+public record PatchGenerationCommand(string GenerationName, JsonPatchDocument<Models.Generation> PatchDocument) : IRequest<bool>;
 
 public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationCommand, bool>
 {
@@ -23,16 +24,6 @@ public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationComm
     {
         #region Validation
 
-        var sameValue = String.Equals(
-            request.GenerationName.Trim(),
-            request.NewValue.Trim(),
-            StringComparison.OrdinalIgnoreCase);
-
-        if (sameValue)
-        {
-            throw new InvalidOperationException("Generation name cannot be the same as the old one.");
-        }
-
         var generation = await _generationRepository.GetGenerationAsync(request.GenerationName.Trim(), cancellationToken);
         if (generation is null)
         {
@@ -41,7 +32,10 @@ public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationComm
             );
         }
 
-        var newGeneration = await _generationRepository.GetGenerationAsync(request.NewValue.Trim(), cancellationToken);
+        request.PatchDocument.ApplyTo(generation);
+        generation.Name = generation.Name.Trim();
+
+        var newGeneration = await _generationRepository.GetGenerationAsync(generation.Name, cancellationToken);
         if (newGeneration is not null)
         {
             throw new InvalidOperationException(
@@ -49,13 +43,7 @@ public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationComm
             );
         }
 
-
-        var entity = new Models.Generation
-        {
-            Name = request.NewValue.Trim()
-        };
-
-        await _validator.ValidateAndThrowAsync(entity, cancellationToken);
+        await _validator.ValidateAndThrowAsync(generation, cancellationToken);
 
         #endregion
 

@@ -1,10 +1,11 @@
 ﻿using Application.Contracts;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Application.Services.Category.Command;
 
-public record PatchCategoryCommand(string CategoryName, string NewName) : IRequest<bool>;
+public record PatchCategoryCommand(string CategoryName, JsonPatchDocument<Models.Category> PatchDocument) : IRequest<bool>;
 
 public class PatchCategoryCommandHandler : IRequestHandler<PatchCategoryCommand, bool>
 {
@@ -21,28 +22,25 @@ public class PatchCategoryCommandHandler : IRequestHandler<PatchCategoryCommand,
     {
         #region Validation
 
-        var sameValue = String.Equals(request.CategoryName.Trim(), request.NewName.Trim());
-        if (sameValue)
-        {
-            throw new InvalidOperationException("You are trying to update the category value with the same one.");
-        }
-
         var category = await _categoryRepository.GetCategoryAsync(request.CategoryName.Trim(), cancellationToken);
         if (category is null)
         {
-            throw new NotFoundException($"Category with the name of \"{request.CategoryName.Trim()}\" could not be found.");
+            throw new NotFoundException(
+                $"Category with the name of \"{request.CategoryName.Trim()}\" could not be found.");
         }
+        
+        request.PatchDocument.ApplyTo(category);
 
-        var newCategory = await _categoryRepository.GetCategoryAsync(request.NewName.Trim(), cancellationToken);
-        if (newCategory is not null && newCategory != category)
+        category.Name = category.Name.Trim();
+
+        var checkNewValue = await _categoryRepository.GetCategoryAsync(category.Name, cancellationToken);
+        if (checkNewValue is not null)
         {
             throw new InvalidOperationException(
                 $"Nev value you are trying to assign to \"{request.CategoryName.Trim()}\" conflicts with existing category.");
         }
 
         #endregion
-
-        category.Name = request.NewName.Trim();
 
         await _validator.ValidateAndThrowAsync(category, cancellationToken);
 

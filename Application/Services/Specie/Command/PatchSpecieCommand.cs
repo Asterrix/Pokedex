@@ -1,10 +1,11 @@
 ﻿using Application.Contracts;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Application.Services.Specie.Command;
 
-public record PatchSpecieCommand(string Name, string NewValue) : IRequest<bool>;
+public record PatchSpecieCommand(string Name, JsonPatchDocument<Models.Specie> PatchDocument) : IRequest<bool>;
 
 public class PatchSpecieCommandHandler : IRequestHandler<PatchSpecieCommand, bool>
 {
@@ -20,33 +21,25 @@ public class PatchSpecieCommandHandler : IRequestHandler<PatchSpecieCommand, boo
     public async Task<bool> Handle(PatchSpecieCommand request, CancellationToken cancellationToken)
     {
         #region Validation
-
-        var sameValue = String.Equals(request.Name.Trim(), request.NewValue.Trim(), StringComparison.OrdinalIgnoreCase);
-        if (sameValue)
-        {
-            throw new InvalidOperationException("Specie name cannot be the same as the old one.");
-        }
-
+        
         var specie = await _specieRepository.GetSpecieAsync(request.Name.Trim(), cancellationToken);
         if (specie is null)
         {
             throw new NotFoundException($"Specie with the name of \"{request.Name.Trim()}\" could not be found.");
         }
 
-        var newSpecie = await _specieRepository.GetSpecieAsync(request.NewValue.Trim(), cancellationToken);
+        request.PatchDocument.ApplyTo(specie);
+        specie.Name = specie.Name.Trim();
+        
+        var newSpecie = await _specieRepository.GetSpecieAsync(specie.Name.Trim(), cancellationToken);
         if (newSpecie is not null)
         {
-            throw new InvalidOperationException($"Nev value you are trying to assign to \"{request.Name.Trim()}\" conflicts with existing specie.");
+            throw new InvalidOperationException($"Specie with the name of {specie.Name.Trim()} already exists.");
         }
 
         #endregion
 
-        var entity = new Models.Specie()
-        {
-            Name = request.NewValue.Trim()
-        };
-
-        await _validator.ValidateAndThrowAsync(entity, cancellationToken);
+        await _validator.ValidateAndThrowAsync(specie, cancellationToken);
 
         return await _specieRepository.PatchSpecieAsync(specie, cancellationToken);
     }
