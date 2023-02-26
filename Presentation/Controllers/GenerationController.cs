@@ -2,11 +2,13 @@
 using Application.Services.Generation.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Produces("application/json")]
 public class GenerationController : ControllerBase
 {
     private readonly ISender _sender;
@@ -31,6 +33,7 @@ public class GenerationController : ControllerBase
         {
             return NotFound();
         }
+
         return Ok(result);
     }
 
@@ -38,7 +41,7 @@ public class GenerationController : ControllerBase
     public async Task<IActionResult> CreateGenerationAsync([FromBody] CreateGenerationCommand command)
     {
         var result = await _sender.Send(command);
-        return CreatedAtAction("GetGenerationQuery", new {name = result.Name}, result);
+        return CreatedAtAction("GetGenerationQuery", new { name = result.Name }, result);
     }
 
     [HttpPatch]
@@ -50,7 +53,10 @@ public class GenerationController : ControllerBase
             throw new Exception();
         }
 
-        return Ok($"{command.Name.Trim()} was successfully updated to a new value of \"{command.NewValue.Trim()}\".");
+        var json = JsonConvert.SerializeObject(
+            $"{command.GenerationName.Trim()} was successfully updated to a new value of \"{command.NewValue.Trim()}\"."
+        );
+        return Ok(json);
     }
 
     [HttpDelete]
@@ -61,6 +67,8 @@ public class GenerationController : ControllerBase
         {
             throw new Exception();
         }
-        return Ok($"Generation was deleted successfully.");
+
+        var json = JsonConvert.SerializeObject("Generation was deleted successfully.");
+        return Ok(json);
     }
 }

@@ -2,11 +2,13 @@
 using Application.Services.Category.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Produces("application/json")]
 public class CategoryController : ControllerBase
 {
     private readonly ISender _sender;
@@ -51,7 +53,10 @@ public class CategoryController : ControllerBase
             throw new Exception();
         }
 
-        return Ok($"{command.Name.Trim()} was successfully updated to a new value of \"{command.NewValue.Trim()}\".");
+        var json = JsonConvert.SerializeObject(
+            $"{command.CategoryName.Trim()} was successfully updated to a new value of \"{command.NewName.Trim()}\"."
+        );
+        return Ok(json);
     }
 
     [HttpDelete]
@@ -63,6 +68,7 @@ public class CategoryController : ControllerBase
             throw new Exception();
         }
 
-        return Ok("Category was deleted successfully.");
+        var json = JsonConvert.SerializeObject("Category was deleted successfully.");
+        return Ok(json);
     }
 }

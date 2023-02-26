@@ -16,7 +16,7 @@ public class DeleteGenerationCommandHandler : IRequestHandler<DeleteGenerationCo
 
     public async Task<bool> Handle(DeleteGenerationCommand request, CancellationToken cancellationToken)
     {
-        var generation = await _generationRepository.GetGenerationAsync(request.Name.Trim());
+        var generation = await _generationRepository.GetGenerationAsync(request.Name.Trim(), cancellationToken);
         if (generation == null)
         {
             throw new NotFoundException(
@@ -24,6 +24,6 @@ public class DeleteGenerationCommandHandler : IRequestHandler<DeleteGenerationCo
             );
         }
 
-        return await _generationRepository.DeleteGenerationAsync(generation);
+        return await _generationRepository.DeleteGenerationAsync(generation, cancellationToken);
     }
 }

@@ -4,9 +4,9 @@ namespace Application.Contracts;
 
 public interface IGenerationRepository
 {
-    Task<List<Generation>> GetAllGenerationsAsync();
-    Task<Generation?> GetGenerationAsync(string name);
-    Task<Generation> CreateGenerationAsync(Generation generation);
-    Task<bool> PatchGenerationAsync(Generation generation, string value);
-    Task<bool> DeleteGenerationAsync(Generation generation);
+    Task<List<Generation>> GetAllGenerationsAsync(CancellationToken cancellationToken);
+    Task<Generation?> GetGenerationAsync(string generationName, CancellationToken cancellationToken);
+    Task<Generation> CreateGenerationAsync(Generation generation, CancellationToken cancellationToken);
+    Task<bool> PatchGenerationAsync(Generation updatedGeneration, CancellationToken cancellationToken);
+    Task<bool> DeleteGenerationAsync(Generation generation, CancellationToken cancellationToken);
 }

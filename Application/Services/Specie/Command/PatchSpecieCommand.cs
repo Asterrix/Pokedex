@@ -27,13 +27,13 @@ public class PatchSpecieCommandHandler : IRequestHandler<PatchSpecieCommand, boo
             throw new InvalidOperationException("Specie name cannot be the same as the old one.");
         }
 
-        var specie = await _specieRepository.GetSpecieAsync(request.Name.Trim());
+        var specie = await _specieRepository.GetSpecieAsync(request.Name.Trim(), cancellationToken);
         if (specie is null)
         {
             throw new NotFoundException($"Specie with the name of \"{request.Name.Trim()}\" could not be found.");
         }
 
-        var newSpecie = await _specieRepository.GetSpecieAsync(request.NewValue.Trim());
+        var newSpecie = await _specieRepository.GetSpecieAsync(request.NewValue.Trim(), cancellationToken);
         if (newSpecie is not null)
         {
             throw new InvalidOperationException($"Nev value you are trying to assign to \"{request.Name.Trim()}\" conflicts with existing specie.");
@@ -48,6 +48,6 @@ public class PatchSpecieCommandHandler : IRequestHandler<PatchSpecieCommand, boo
 
         await _validator.ValidateAndThrowAsync(entity, cancellationToken);
 
-        return await _specieRepository.PatchSpecieAsync(specie, request.NewValue.Trim());
+        return await _specieRepository.PatchSpecieAsync(specie, cancellationToken);
     }
 }

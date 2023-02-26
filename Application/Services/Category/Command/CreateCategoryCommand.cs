@@ -19,7 +19,7 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
 
     public async Task<Models.Category> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetCategoryAsync(request.Name.Trim());
+        var category = await _categoryRepository.GetCategoryAsync(request.Name.Trim(), cancellationToken);
         if (category is not null)
         {
             throw new InvalidOperationException($"Category with the name of \"{request.Name.Trim()}\" already exists.");
@@ -32,6 +32,6 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
 
         await _validator.ValidateAndThrowAsync(entity, cancellationToken);
 
-        return await _categoryRepository.CreateCategoryAsync(entity);
+        return await _categoryRepository.CreateCategoryAsync(entity, cancellationToken);
     }
 }

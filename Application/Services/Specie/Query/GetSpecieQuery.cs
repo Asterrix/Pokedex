@@ -16,7 +16,7 @@ public class GetSpecieQueryHandler : IRequestHandler<GetSpecieQuery, Models.Spec
 
     public async Task<Models.Specie?> Handle(GetSpecieQuery request, CancellationToken cancellationToken)
     {
-        var result = await _specieRepository.GetSpecieAsync(request.Name.Trim());
+        var result = await _specieRepository.GetSpecieAsync(request.Name.Trim(), cancellationToken);
         return result;
     }
 }

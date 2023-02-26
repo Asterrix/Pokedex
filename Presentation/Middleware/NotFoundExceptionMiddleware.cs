@@ -27,7 +27,7 @@ public class NotFoundExceptionMiddleware : IMiddleware
             var problemDetails = new ErrorModel
             {
                 Type = "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.5",
-                Title = "Not Found Error",
+                Title = "Not Found",
                 Status = (int)HttpStatusCode.NotFound,
                 Detail = "Not found error occured"
             };

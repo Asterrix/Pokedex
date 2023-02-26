@@ -4,9 +4,9 @@ namespace Application.Contracts;
 
 public interface ICategoryRepository
 {
-    Task<List<Category>> GetAllCategoryAsync();
-    Task<Category?> GetCategoryAsync(string name);
-    Task<Category> CreateCategoryAsync(Category category);
-    Task<bool> PatchCategoryAsync(Category category, string value);
-    Task<bool> DeleteCategoryAsync(Category category);
+    Task<List<Category>> GetAllCategoryAsync(CancellationToken cancellationToken);
+    Task<Category?> GetCategoryAsync(string categoryName, CancellationToken cancellationToken);
+    Task<Category> CreateCategoryAsync(Category category, CancellationToken cancellationToken);
+    Task<bool> PatchCategoryAsync(Category updatedCategory, CancellationToken cancellationToken);
+    Task<bool> DeleteCategoryAsync(Category category, CancellationToken cancellationToken);
 }

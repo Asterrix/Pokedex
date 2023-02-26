@@ -1,43 +1,49 @@
 ﻿using Application.Contracts;
 using Application.Models;
+using Infrastructure.Persistence.DatabaseContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
 public class SpecieRepository : ISpecieRepository
 {
-    private List<Specie> _species = new List<Specie>()
-    {
-        new Specie(){Name = "Specie I"},
-        new Specie(){Name = "Specie II"},
-        new Specie(){Name = "Specie III"}
-    };
+    private readonly PokedexDbContext _context;
 
-    
-    public async Task<List<Specie>> GetAllSpecieAsync()
+    public SpecieRepository(PokedexDbContext context)
     {
-        return _species;
+        _context = context;
     }
 
-    public async Task<Specie?> GetSpecieAsync(string name)
+    public async Task<List<Specie>> GetAllSpecieAsync(CancellationToken cancellationToken)
     {
-        return _species.Find(x => String.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
+        return await _context.Species.ToListAsync(cancellationToken);
     }
 
-    public async Task<Specie> CreateSpecieAsync(Specie specie)
+    public async Task<Specie?> GetSpecieAsync(string specieName, CancellationToken cancellationToken)
     {
-        _species.Add(specie);
-        return _species.Find(x => x.Name == specie.Name);
+        return await _context
+            .Species
+            .FirstOrDefaultAsync(s => s.Name.ToLower() == specieName.ToLower(), cancellationToken);
     }
 
-    public async Task<bool> PatchSpecieAsync(Specie specie, string value)
+    public async Task<Specie> CreateSpecieAsync(Specie specie, CancellationToken cancellationToken)
     {
-        specie.Name = value;
+        await _context.Species.AddAsync(specie, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        return await GetSpecieAsync(specie.Name, cancellationToken) ?? throw new Exception();
+    }
+
+    public async Task<bool> PatchSpecieAsync(Specie updatedSpecie, CancellationToken cancellationToken)
+    {
+        _context.Species.Update(updatedSpecie);
+        await _context.SaveChangesAsync(cancellationToken);
         return true;
     }
 
-    public async Task<bool> DeleteSpecieAsync(Specie specie)
+    public async Task<bool> DeleteSpecieAsync(Specie specie, CancellationToken cancellationToken)
     {
-        _species.Remove(specie);
+        _context.Species.Remove(specie);
+        await _context.SaveChangesAsync(cancellationToken);
         return true;
     }
 }

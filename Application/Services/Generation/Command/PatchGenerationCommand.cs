@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Services.Generation.Command;
 
-public record PatchGenerationCommand(string Name, string NewValue) : IRequest<bool>;
+public record PatchGenerationCommand(string GenerationName, string NewValue) : IRequest<bool>;
 
 public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationCommand, bool>
 {
@@ -24,7 +24,7 @@ public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationComm
         #region Validation
 
         var sameValue = String.Equals(
-            request.Name.Trim(),
+            request.GenerationName.Trim(),
             request.NewValue.Trim(),
             StringComparison.OrdinalIgnoreCase);
 
@@ -33,19 +33,19 @@ public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationComm
             throw new InvalidOperationException("Generation name cannot be the same as the old one.");
         }
 
-        var generation = await _generationRepository.GetGenerationAsync(request.Name.Trim());
+        var generation = await _generationRepository.GetGenerationAsync(request.GenerationName.Trim(), cancellationToken);
         if (generation is null)
         {
             throw new NotFoundException(
-                $"Generation with the name of \"{request.Name.Trim()}\" could not be found."
+                $"Generation with the name of \"{request.GenerationName.Trim()}\" could not be found."
             );
         }
 
-        var newGeneration = await _generationRepository.GetGenerationAsync(request.NewValue.Trim());
+        var newGeneration = await _generationRepository.GetGenerationAsync(request.NewValue.Trim(), cancellationToken);
         if (newGeneration is not null)
         {
             throw new InvalidOperationException(
-                $"New value you are trying to assign to \"{request.Name.Trim()}\" conflicts with existing generation."
+                $"New value you are trying to assign to \"{request.GenerationName.Trim()}\" conflicts with existing generation."
             );
         }
 
@@ -59,6 +59,6 @@ public class PatchGenerationCommandHandler : IRequestHandler<PatchGenerationComm
 
         #endregion
 
-        return await _generationRepository.PatchGenerationAsync(generation, request.NewValue.Trim());
+        return await _generationRepository.PatchGenerationAsync(generation, cancellationToken);
     }
 }

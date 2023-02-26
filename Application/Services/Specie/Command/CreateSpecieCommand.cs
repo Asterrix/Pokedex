@@ -21,7 +21,7 @@ public class CreateSpecieCommandHandler : IRequestHandler<CreateSpecieCommand, M
 
     public async Task<Models.Specie> Handle(CreateSpecieCommand request, CancellationToken cancellationToken)
     {
-        var specie = await _specieRepository.GetSpecieAsync(request.Name.Trim());
+        var specie = await _specieRepository.GetSpecieAsync(request.Name.Trim(), cancellationToken);
         if (specie is not null)
         {
             throw new InvalidOperationException($"Specie with the name of \"{request.Name.Trim()}\" already exists.");
@@ -34,6 +34,6 @@ public class CreateSpecieCommandHandler : IRequestHandler<CreateSpecieCommand, M
 
         await _validator.ValidateAndThrowAsync(entity, cancellationToken);
 
-        return await _specieRepository.CreateSpecieAsync(entity);
+        return await _specieRepository.CreateSpecieAsync(entity, cancellationToken);
     }
 }

@@ -7,6 +7,7 @@ namespace Presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Produces("application/json")]
 public class SpecieController : ControllerBase
 {
     private readonly ISender _sender;

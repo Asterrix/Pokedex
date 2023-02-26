@@ -4,9 +4,9 @@ namespace Application.Contracts;
 
 public interface ISpecieRepository
 {
-    Task<List<Specie>> GetAllSpecieAsync();
-    Task<Specie?> GetSpecieAsync(string name);
-    Task<Specie> CreateSpecieAsync(Specie specie);
-    Task<bool> PatchSpecieAsync(Specie specie, string value);
-    Task<bool> DeleteSpecieAsync(Specie specie);
+    Task<List<Specie>> GetAllSpecieAsync(CancellationToken cancellationToken);
+    Task<Specie?> GetSpecieAsync(string specieName, CancellationToken cancellationToken);
+    Task<Specie> CreateSpecieAsync(Specie specie, CancellationToken cancellationToken);
+    Task<bool> PatchSpecieAsync(Specie updatedSpecie, CancellationToken cancellationToken);
+    Task<bool> DeleteSpecieAsync(Specie specie, CancellationToken cancellationToken);
 }

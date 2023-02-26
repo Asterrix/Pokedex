@@ -21,7 +21,7 @@ public class CreateGenerationCommandHandler : IRequestHandler<CreateGenerationCo
 
     public async Task<Models.Generation> Handle(CreateGenerationCommand request, CancellationToken cancellationToken)
     {
-        var generation = await _generationRepository.GetGenerationAsync(request.Name.Trim());
+        var generation = await _generationRepository.GetGenerationAsync(request.Name.Trim(), cancellationToken);
         if (generation is not null)
         {
             throw new InvalidOperationException(
@@ -35,6 +35,6 @@ public class CreateGenerationCommandHandler : IRequestHandler<CreateGenerationCo
 
         await _validator.ValidateAndThrowAsync(entity, cancellationToken);
 
-        return await _generationRepository.CreateGenerationAsync(entity);
+        return await _generationRepository.CreateGenerationAsync(entity, cancellationToken);
     }
 }
