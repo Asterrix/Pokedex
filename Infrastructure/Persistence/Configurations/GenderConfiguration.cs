@@ -11,7 +11,7 @@ public class GenderConfiguration : IEntityTypeConfiguration<Gender>
         ConfigureIdFiled(builder);
     }
 
-    private void ConfigureIdFiled(EntityTypeBuilder<Gender> builder)
+    private static void ConfigureIdFiled(EntityTypeBuilder<Gender> builder)
     {
         builder.HasKey(x => x.PokemonId);
     }

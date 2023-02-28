@@ -11,6 +11,6 @@ public class Pokemon
     public string Description { get; set; } = null!;
     public Generation Generation { get; set; } = null!;
     public Specie Specie { get; set; } = null!;
-    public Category Category { get; set; } = null!;
-    public Statistic Statistic { get; set; } = null!;
+    public List<CategoryRelation> Categories { get; set; } = null!;
+    public Statistic Statistics { get; set; } = null!;
 }

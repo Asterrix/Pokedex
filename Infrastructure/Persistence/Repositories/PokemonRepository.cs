@@ -21,8 +21,9 @@ public class PokemonRepository : IPokemonRepository
             .Include(x => x.Gender)
             .Include(x => x.Generation)
             .Include(x => x.Specie)
-            .Include(x => x.Category)
-            .Include(x => x.Statistic)
+            .Include(x => x.Categories)
+            .ThenInclude(x => x.Category)
+            .Include(x => x.Statistics)
             .ToListAsync(cancellationToken);
     }
 
@@ -33,8 +34,9 @@ public class PokemonRepository : IPokemonRepository
             .Include(x => x.Gender)
             .Include(x => x.Generation)
             .Include(x => x.Specie)
-            .Include(x => x.Category)
-            .Include(x => x.Statistic)
+            .Include(x => x.Categories)
+            .ThenInclude(x => x.Category)
+            .Include(x => x.Statistics)
             .FirstOrDefaultAsync(p => p.Name.ToLower() == pokemonName.ToLower(), cancellationToken);
     }
 

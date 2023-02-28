@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.Helpers;
 using FluentValidation;
 using MediatR;
 
@@ -25,10 +26,7 @@ public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryComman
             throw new InvalidOperationException($"Category with the name of \"{request.Name.Trim()}\" already exists.");
         }
 
-        var entity = new Models.Category
-        {
-            Name = request.Name.Trim()
-        };
+        var entity = ModelCreator.CreateCategoryModel(request);
 
         await _validator.ValidateAndThrowAsync(entity, cancellationToken);
 

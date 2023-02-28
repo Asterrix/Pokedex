@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.Helpers;
 using FluentValidation;
 using MediatR;
 
@@ -28,10 +29,7 @@ public class CreateGenerationCommandHandler : IRequestHandler<CreateGenerationCo
                 $"Generation with the name of \"{request.Name.Trim()}\" already exists.");
         }
 
-        var entity = new Models.Generation
-        {
-            Name = request.Name.Trim()
-        };
+        var entity = ModelCreator.CreateGenerationModel(request);
 
         await _validator.ValidateAndThrowAsync(entity, cancellationToken);
 

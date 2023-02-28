@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.Helpers;
 using FluentValidation;
 using MediatR;
 
@@ -27,10 +28,7 @@ public class CreateSpecieCommandHandler : IRequestHandler<CreateSpecieCommand, M
             throw new InvalidOperationException($"Specie with the name of \"{request.Name.Trim()}\" already exists.");
         }
 
-        var entity = new Models.Specie
-        {
-            Name = request.Name.Trim()
-        };
+        var entity = ModelCreator.CreateSpecieModel(request);
 
         await _validator.ValidateAndThrowAsync(entity, cancellationToken);
 

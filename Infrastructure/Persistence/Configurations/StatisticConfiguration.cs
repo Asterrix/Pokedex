@@ -12,7 +12,7 @@ public class StatisticConfiguration : IEntityTypeConfiguration<Statistic>
         ConfigureTotalField(builder);
     }
 
-    private void ConfigureIdField(EntityTypeBuilder<Statistic> builder)
+    private static void ConfigureIdField(EntityTypeBuilder<Statistic> builder)
     {
         builder.HasKey(k => k.PokemonId);
 
@@ -21,7 +21,7 @@ public class StatisticConfiguration : IEntityTypeConfiguration<Statistic>
             .HasColumnName("PokemonID");
     }
 
-    private void ConfigureTotalField(EntityTypeBuilder<Statistic> builder)
+    private static void ConfigureTotalField(EntityTypeBuilder<Statistic> builder)
     {
         builder
             .Property(x => x.Total)

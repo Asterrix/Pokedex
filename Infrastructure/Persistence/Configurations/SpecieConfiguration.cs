@@ -12,7 +12,7 @@ public class SpecieConfiguration : IEntityTypeConfiguration<Specie>
         ConfigureNameField(builder);
     }
     
-    private void ConfigureIdFiled(EntityTypeBuilder<Specie> builder)
+    private static void ConfigureIdFiled(EntityTypeBuilder<Specie> builder)
     {
         builder.HasKey(k => k.Id);
 
@@ -21,7 +21,7 @@ public class SpecieConfiguration : IEntityTypeConfiguration<Specie>
             .HasColumnName("ID");
     }
     
-    private void ConfigureNameField(EntityTypeBuilder<Specie> builder)
+    private static void ConfigureNameField(EntityTypeBuilder<Specie> builder)
     {
         builder
             .Property(x => x.Name)

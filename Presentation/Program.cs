@@ -22,6 +22,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Cors
+app.UseCors(policyBuilder => policyBuilder.AllowAnyHeader().AllowAnyOrigin().AllowAnyHeader());
+    
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

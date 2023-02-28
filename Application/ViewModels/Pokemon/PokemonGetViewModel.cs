@@ -1,10 +1,11 @@
-﻿using Application.ViewModels.Gender;
+﻿using Application.ViewModels.Category;
+using Application.ViewModels.Gender;
 using Application.ViewModels.Statistic;
 
 namespace Application.ViewModels.Pokemon;
 
 public record PokemonGetViewModel(
-    Guid Guid,
+    Guid Id,
     string Name,
     string Portrait,
     float Height,
@@ -13,5 +14,5 @@ public record PokemonGetViewModel(
     string Description,
     string Generation,
     string Specie,
-    string Category,
+    List<CategoryRelationViewModel> Categories,
     StatisticGetViewModel Statistics);

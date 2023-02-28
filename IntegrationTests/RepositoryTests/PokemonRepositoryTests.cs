@@ -75,8 +75,17 @@ public class PokemonRepositoryTests
             Description = "Description",
             Generation = new Generation() { Name = "Any" },
             Specie = new Specie() { Name = "Any" },
-            Category = new Category() { Name = "Any" },
-            Statistic = new Statistic
+            Categories = new List<CategoryRelation>()
+            {
+                new CategoryRelation()
+                {
+                    Category = new Category()
+                    {
+                        Name = "Any"
+                    }
+                }
+            },
+            Statistics = new Statistic
             {
                 Hp = 100,
                 Attack = 100,
@@ -126,8 +135,17 @@ public class PokemonRepositoryTests
             Description = "Description",
             Generation = new Generation() { Name = "Any" },
             Specie = new Specie() { Name = "Any" },
-            Category = new Category() { Name = "Any" },
-            Statistic = new Statistic
+            Categories = new List<CategoryRelation>()
+            {
+                new CategoryRelation()
+                {
+                    Category = new Category()
+                    {
+                        Name = "Any"
+                    }
+                }
+            },
+            Statistics = new Statistic
             {
                 Hp = 100,
                 Attack = 100,
@@ -178,8 +196,17 @@ public class PokemonRepositoryTests
             Description = "Description",
             Generation = new Generation() { Name = "Any" },
             Specie = new Specie() { Name = "Any" },
-            Category = new Category() { Name = "Any" },
-            Statistic = new Statistic
+            Categories = new List<CategoryRelation>()
+            {
+                new CategoryRelation()
+                {
+                    Category = new Category()
+                    {
+                        Name = "Any"
+                    }
+                }
+            },
+            Statistics = new Statistic
             {
                 Hp = 100,
                 Attack = 100,
@@ -201,8 +228,17 @@ public class PokemonRepositoryTests
             Description = "Description",
             Generation = new Generation() { Name = "Any" },
             Specie = new Specie() { Name = "Any" },
-            Category = new Category() { Name = "Any" },
-            Statistic = new Statistic
+            Categories = new List<CategoryRelation>()
+            {
+                new CategoryRelation()
+                {
+                    Category = new Category()
+                    {
+                        Name = "Any"
+                    }
+                }
+            },
+            Statistics = new Statistic
             {
                 Hp = 100,
                 Attack = 100,
@@ -213,8 +249,8 @@ public class PokemonRepositoryTests
                 Total = 600
             }
         };
-        
-        
+
+
         await context.Pokemons.AddAsync(model);
         await context.SaveChangesAsync();
 
@@ -230,19 +266,19 @@ public class PokemonRepositoryTests
         model.Description = "ChangedDescription";
         model.Generation = new Generation() { Name = "Changed" };
         model.Specie = new Specie() { Name = "Changed" };
-        model.Statistic.Attack = 42;
-        model.Statistic.Defense = 12;
-        model.Statistic.SpecialAttack = 30;
-        model.Statistic.SpecialDefense = 20;
-        model.Statistic.Speed = 60;
-        
+        model.Statistics.Attack = 42;
+        model.Statistics.Defense = 12;
+        model.Statistics.SpecialAttack = 30;
+        model.Statistics.SpecialDefense = 20;
+        model.Statistics.Speed = 60;
+
         var result = await repository.PatchPokemonAsync(model, new CancellationToken());
         var databaseValues = await context.Pokemons
             .Include(x => x.Gender)
             .Include(x => x.Generation)
             .Include(x => x.Specie)
-            .Include(x => x.Category)
-            .Include(x => x.Statistic)
+            .Include(x => x.Categories)
+            .Include(x => x.Statistics)
             .FirstOrDefaultAsync(x => x.Name == model.Name);
 
         #endregion
@@ -257,13 +293,14 @@ public class PokemonRepositoryTests
         Assert.NotEqual(clone.Gender.Male, databaseValues.Gender.Male);
         Assert.NotEqual(clone.Gender.Female, databaseValues.Gender.Female);
         Assert.NotEqual(clone.Specie, databaseValues.Specie);
-        Assert.Equal(clone.Category.Name, databaseValues.Category.Name);
-        Assert.Equal(clone.Statistic.Hp, databaseValues.Statistic.Hp);
-        Assert.NotEqual(clone.Statistic.Attack, databaseValues.Statistic.Attack);
-        Assert.NotEqual(clone.Statistic.Defense, databaseValues.Statistic.Defense);
-        Assert.NotEqual(clone.Statistic.SpecialAttack, databaseValues.Statistic.SpecialAttack);
-        Assert.NotEqual(clone.Statistic.SpecialDefense, databaseValues.Statistic.SpecialDefense);
-        Assert.NotEqual(clone.Statistic.Speed, databaseValues.Statistic.Speed);
+        Assert.Equal(clone.Categories[0].Category.Id, databaseValues.Categories[0].Category.Id);
+        Assert.Equal(clone.Categories[0].Category.Name, databaseValues.Categories[0].Category.Name);
+        Assert.Equal(clone.Statistics.Hp, databaseValues.Statistics.Hp);
+        Assert.NotEqual(clone.Statistics.Attack, databaseValues.Statistics.Attack);
+        Assert.NotEqual(clone.Statistics.Defense, databaseValues.Statistics.Defense);
+        Assert.NotEqual(clone.Statistics.SpecialAttack, databaseValues.Statistics.SpecialAttack);
+        Assert.NotEqual(clone.Statistics.SpecialDefense, databaseValues.Statistics.SpecialDefense);
+        Assert.NotEqual(clone.Statistics.Speed, databaseValues.Statistics.Speed);
 
         #endregion
     }
@@ -286,8 +323,17 @@ public class PokemonRepositoryTests
             Description = "Description",
             Generation = new Generation() { Name = "Any" },
             Specie = new Specie() { Name = "Any" },
-            Category = new Category() { Name = "Any" },
-            Statistic = new Statistic
+            Categories = new List<CategoryRelation>()
+            {
+                new CategoryRelation()
+                {
+                    Category = new Category()
+                    {
+                        Name = "Any"
+                    }
+                }
+            },
+            Statistics = new Statistic
             {
                 Hp = 100,
                 Attack = 100,

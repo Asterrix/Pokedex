@@ -1,7 +1,8 @@
 ﻿using Application.Contracts;
-using Application.Models;
-using Application.ViewModels;
+using Application.Helpers;
+using Application.Mapper;
 using Application.ViewModels.Gender;
+using Application.ViewModels.Pokemon;
 using Application.ViewModels.Statistic;
 using FluentValidation;
 using MediatR;
@@ -17,16 +18,16 @@ public record CreatePokemonCommand(
     string Description,
     string Generation,
     string Specie,
-    string Category,
-    StatisticPostViewModel Statistics) : IRequest<Models.Pokemon>;
+    List<Models.Category> Category,
+    StatisticPostViewModel Statistics) : IRequest<PokemonGetViewModel>;
 
-public class CreatePokemonCommandHandler : IRequestHandler<CreatePokemonCommand, Models.Pokemon>
+public class CreatePokemonCommandHandler : IRequestHandler<CreatePokemonCommand, PokemonGetViewModel>
 {
-    private readonly IValidator<Models.Pokemon> _validator;
-    private readonly IPokemonRepository _pokemonRepository;
-    private readonly IGenerationRepository _generationRepository;
-    private readonly ISpecieRepository _specieRepository;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IGenerationRepository _generationRepository;
+    private readonly IPokemonRepository _pokemonRepository;
+    private readonly ISpecieRepository _specieRepository;
+    private readonly IValidator<Models.Pokemon> _validator;
 
     public CreatePokemonCommandHandler(
         IValidator<Models.Pokemon> validator,
@@ -42,7 +43,7 @@ public class CreatePokemonCommandHandler : IRequestHandler<CreatePokemonCommand,
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<Models.Pokemon> Handle(CreatePokemonCommand request, CancellationToken cancellationToken)
+    public async Task<PokemonGetViewModel> Handle(CreatePokemonCommand request, CancellationToken cancellationToken)
     {
         #region Validation
 
@@ -64,43 +65,33 @@ public class CreatePokemonCommandHandler : IRequestHandler<CreatePokemonCommand,
             throw new NotFoundException($"Specie with the name of \"{request.Specie.Trim()}\" does not exist.");
         }
 
-        var category = await _categoryRepository.GetCategoryAsync(request.Category.Trim(), cancellationToken);
-        if (category is null)
+
+        #region Grab Categories & Validate Their Existance
+
+        var listCategories = new List<Models.Category>();
+
+        foreach (var category in request.Category)
         {
-            throw new NotFoundException($"Category with the name of \"{request.Category.Trim()}\" does not exist.");
+            var categoryExists = await _categoryRepository.GetCategoryAsync(category.Name.Trim(), cancellationToken);
+            if (categoryExists is null)
+            {
+                throw new NotFoundException($"Category with the name of \"{category.Name.Trim()}\" does not exist.");
+            }
+
+            listCategories.Add(categoryExists);
         }
 
-        var entity = new Models.Pokemon
-        {
-            Name = request.Name.Trim(),
-            Portrait = request.Portrait.Trim(),
-            Height = request.Height,
-            Weight = request.Weight,
-            Gender = new Gender
-            {
-                Male = request.Gender.Male,
-                Female = request.Gender.Female
-            },
-            Description = request.Description,
-            Generation = generation,
-            Specie = specie,
-            Category = category,
-            Statistic = new Statistic
-            {
-                Hp = request.Statistics.Hp,
-                Attack = request.Statistics.Attack,
-                Defense = request.Statistics.Defense,
-                SpecialAttack = request.Statistics.SpecialAttack,
-                SpecialDefense = request.Statistics.SpecialDefense,
-                Speed = request.Statistics.Speed
-            }
-        };
+        #endregion
+
+
+        var entity = ModelCreator.CreatePokemonModel(request, generation, specie, listCategories);
 
         await _validator.ValidateAndThrowAsync(entity, cancellationToken);
 
         #endregion
 
+        var result = await _pokemonRepository.CreatePokemonAsync(entity, cancellationToken);
 
-        return await _pokemonRepository.CreatePokemonAsync(entity, cancellationToken);
+        return PokemonMapper.ToPokemonGetViewModel(ref result);
     }
 }

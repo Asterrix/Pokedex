@@ -12,7 +12,7 @@ public class GenerationConfiguration : IEntityTypeConfiguration<Generation>
         ConfigureNameField(builder);
     }
 
-    private void ConfigureIdFiled(EntityTypeBuilder<Generation> builder)
+    private static void ConfigureIdFiled(EntityTypeBuilder<Generation> builder)
     {
         builder.HasKey(k => k.Id);
 
@@ -21,7 +21,7 @@ public class GenerationConfiguration : IEntityTypeConfiguration<Generation>
             .HasColumnName("ID");
     }
     
-    private void ConfigureNameField(EntityTypeBuilder<Generation> builder)
+    private static void ConfigureNameField(EntityTypeBuilder<Generation> builder)
     {
         builder
             .Property(x => x.Name)

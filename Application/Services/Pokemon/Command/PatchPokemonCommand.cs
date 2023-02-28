@@ -33,13 +33,13 @@ public class PatchPokemonCommandHandler : IRequestHandler<PatchPokemonCommand, b
         pokemon.Description = pokemon.Description.Trim();
         pokemon.Portrait = pokemon.Portrait.Trim();
 
-        var checkNewValue = await _pokemonRepository.GetPokemonAsync(pokemon.Name, cancellationToken);
-        if (checkNewValue is not null)
-        {
-            throw new InvalidOperationException(
-                $"There already exists a pokemon with the name of {pokemon.Name.Trim()}"
-            );
-        }
+        // var checkNewValue = await _pokemonRepository.GetPokemonAsync(pokemon.Name, cancellationToken);
+        // if (checkNewValue is not null)
+        // {
+        //     throw new InvalidOperationException(
+        //         $"There already exists a pokemon with the name of {pokemon.Name.Trim()}"
+        //     );
+        // }
 
         await _validator.ValidateAndThrowAsync(pokemon, cancellationToken);
 

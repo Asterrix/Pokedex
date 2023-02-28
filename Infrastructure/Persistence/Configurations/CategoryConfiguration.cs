@@ -12,7 +12,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         ConfigureNameField(builder);
     }
 
-    private void ConfigureIdFiled(EntityTypeBuilder<Category> builder)
+    private static void ConfigureIdFiled(EntityTypeBuilder<Category> builder)
     {
         builder.HasKey(k => k.Id);
 
@@ -21,7 +21,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasColumnName("ID");
     }
     
-    private void ConfigureNameField(EntityTypeBuilder<Category> builder)
+    private static void ConfigureNameField(EntityTypeBuilder<Category> builder)
     {
         builder
             .Property(x => x.Name)
