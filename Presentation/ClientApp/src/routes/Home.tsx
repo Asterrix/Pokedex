@@ -1,47 +1,21 @@
-import axios from "axios";
 import {Card} from "../components/card/Card";
-import {SearchBar} from "../components/searchbar/SearchBar";
 import * as S from "../pages/Home/styles/HomeLayoutSyled";
-import {useEffect, useState} from "react";
-import {IPokemon} from "../utils/interfaces/IPokemon";
+import {useContext} from "react";
+import {PokemonContext} from "../utils/context/PokemonContext";
 
 export const Home = () => {
-    const [pokemons, setPokemons] = useState<Array<IPokemon>>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const {pokemons, isLoading, error} = useContext(PokemonContext);
 
-    async function fetchData() {
-        try {
-            const response = await axios.get("https://localhost:7085/Pokemon/all");
-            if (response.status != 200) {
-                throw new Error("Failed to fetch data.");
-            }
-            setPokemons(response.data);
-        } catch (e: any) {
-            console.log("Error fetching data");
-            setError(error);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-    
     return (
         <S.HomeLayout>
-            <S.HeaderLayout>
-                <S.PokedexHelement>Pokédex</S.PokedexHelement>
-                <SearchBar/>
-            </S.HeaderLayout>
-            {loading ? (<p>Loading data...</p>) : error ? (<p>Error fetching data:{error}</p>) :
-                <S.HeroSection>
-                    {pokemons?.map((value, index) => {
+            {isLoading ?
+                (<S.HeroSection><p>Loading data...</p></S.HeroSection>) : error ? (
+                    <S.HeroSection><p>Error fetching data:{error}</p></S.HeroSection>) : (pokemons.length > 0) ?
+                    <S.HeroSection>{pokemons?.map((value, index) => {
                         return <Card key={value.id} pokemonData={value} listId={++index}/>;
-                    })}
-                </S.HeroSection>
+                    })}</S.HeroSection> : <S.HeroSection><p>No Results</p></S.HeroSection>
             }
+
         </S.HomeLayout>
     );
 };

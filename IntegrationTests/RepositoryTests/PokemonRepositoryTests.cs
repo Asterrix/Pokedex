@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.Serialization.Formatters.Binary;
-using Application.Models;
+﻿using Application.Models;
 using Infrastructure.Persistence.Repositories;
 using IntegrationTests.RepositoryTests.Helpers;
 using Microsoft.EntityFrameworkCore;

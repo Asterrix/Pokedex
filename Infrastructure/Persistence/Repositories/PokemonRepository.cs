@@ -14,17 +14,23 @@ public class PokemonRepository : IPokemonRepository
         _context = context;
     }
 
-    public async Task<List<Pokemon>> GetAllPokemonAsync(CancellationToken cancellationToken)
+    public async Task<List<Pokemon>> GetAllPokemonAsync(CancellationToken cancellationToken, string? name = "")
     {
-        return await _context
-            .Pokemons
+        var result = _context.Pokemons
             .Include(x => x.Gender)
             .Include(x => x.Generation)
             .Include(x => x.Specie)
             .Include(x => x.Categories)
             .ThenInclude(x => x.Category)
-            .Include(x => x.Statistics)
-            .ToListAsync(cancellationToken);
+            .Include(x => x.Statistics);
+
+
+        if (name is null)
+        {
+            return await result.ToListAsync(cancellationToken);
+        }
+
+        return await result.Where(n => n.Name.Contains(name)).ToListAsync(cancellationToken);
     }
 
     public async Task<Pokemon?> GetPokemonAsync(string pokemonName, CancellationToken cancellationToken)

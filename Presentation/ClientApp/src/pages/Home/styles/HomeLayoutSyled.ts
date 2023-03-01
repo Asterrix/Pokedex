@@ -7,18 +7,6 @@ export const HomeLayout = styled.div`
   grid-template-rows: 1fr;
 `;
 
-export const HeaderLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 4.8rem;
-  margin: 1.2rem 0;
-`;
-
-export const PokedexHelement = styled.h1`
-  font-weight: 700;
-  font-size: 4.8rem;
-`;
-
 export const HeroSection = styled.section`
   align-items: flex-start;
   display: grid;

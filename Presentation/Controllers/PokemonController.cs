@@ -21,9 +21,9 @@ public class PokemonController : ControllerBase
     }
 
     [HttpGet("All")]
-    public async Task<IActionResult> GetPokemonListQueryAsync()
+    public async Task<IActionResult> GetPokemonListQueryAsync([FromQuery(Name = "name")] string name = "")
     {
-        var result = await _sender.Send(new GetPokemonListQuery());
+        var result = await _sender.Send(new GetPokemonListQuery(name));
         return Ok(result);
     }
 
@@ -47,7 +47,8 @@ public class PokemonController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<IActionResult> PatchPokemonAsync(string name, [FromBody] JsonPatchDocument<Pokemon> jsonPatchDocument)
+    public async Task<IActionResult> PatchPokemonAsync(string name,
+        [FromBody] JsonPatchDocument<Pokemon> jsonPatchDocument)
     {
         var command = new PatchPokemonCommand(name, jsonPatchDocument);
         var result = await _sender.Send(command);

@@ -4,7 +4,7 @@ namespace Application.Contracts;
 
 public interface IPokemonRepository
 {
-    Task<List<Pokemon>> GetAllPokemonAsync(CancellationToken cancellationToken);
+    Task<List<Pokemon>> GetAllPokemonAsync(CancellationToken cancellationToken, string? name = "");
     Task<Pokemon?> GetPokemonAsync(string pokemonName, CancellationToken cancellationToken);
     Task<Pokemon> CreatePokemonAsync(Pokemon pokemon, CancellationToken cancellationToken);
     Task<bool> PatchPokemonAsync(Pokemon updatedPokemon, CancellationToken cancellationToken);

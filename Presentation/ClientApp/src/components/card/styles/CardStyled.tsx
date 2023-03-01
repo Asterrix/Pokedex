@@ -1,22 +1,21 @@
 import styled from "styled-components";
 import {CategoryColors, Color} from "../../../styles/Color";
 
-export interface ICardStyled{
-    categoryColor: string;
+export interface ICardStyled {
+    backgroundColor?: string;
+    categoryColor?: string;
 }
 
 const handleCategoryColor = (c: string) => {
-    for (let category in CategoryColors){
-        console.log(c);
-        console.log(category);
-        if(c.toLowerCase() === category.toLowerCase()){
+    for (let category in CategoryColors) {
+        if (c.toLowerCase() === category.toLowerCase()) {
             return `${CategoryColors[category]}`
         }
     }
 }
 
-export const CardWrapper = styled.div`
-  background-color: lightgreen;
+export const CardWrapper = styled.div<ICardStyled>`
+  background-color: ${p => p?.backgroundColor ? handleCategoryColor(p.backgroundColor) : "#a8a878"};
   border-radius: 0.8rem;
   transition: all 300ms;
   box-shadow: rgba(9, 30, 66, 0.25) 0 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
@@ -41,8 +40,8 @@ export const CardWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.1); 
-    z-index: 1; 
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 1;
   }
 `;
 
@@ -55,7 +54,7 @@ export const Info = styled.div`
 `
 
 export const Id = styled.label`
-font-size: 2rem;
+  font-size: 2rem;
   color: ${Color.Text};
   font-weight: 700;
 `
@@ -72,9 +71,10 @@ export const CategoryContainer = styled.div`
 `
 
 export const Category = styled.p<ICardStyled>`
-  background-color: ${p => handleCategoryColor(p.categoryColor)};
+  background-color: ${p => p?.categoryColor ? handleCategoryColor(p.categoryColor) : "#b8b8d0"};
   padding: 0.8rem 1.2rem;
   border-radius: 0.4rem;
+  color: white;
 `
 
 export const PortraitContainer = styled.div`
