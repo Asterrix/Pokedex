@@ -11,7 +11,7 @@ export const Card = (p: ICard) => {
     const navigate = useNavigate();
 
     const handleNavigation = () => {
-        navigate(`pokemon/${p.pokemonData.id}/${p.pokemonData.name}`);
+        navigate(`pokemon/${p.pokemonData.name}`);
     };
 
 

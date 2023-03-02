@@ -1,14 +1,5 @@
-﻿export interface IGender {
-    male:boolean;
-    female:boolean;
-}
-
-export interface ICategory {
-    category: {
-        id: string;
-        categoryName: string;    
-    }
-}
+﻿import {IGender} from "./IGender";
+import {ICategory} from "./ICategory";
 
 export interface IPokemon {
     id: string;
@@ -19,9 +10,8 @@ export interface IPokemon {
     gender: IGender;
     description: string;
     generation: string;
-    species: string;
+    specie: string;
     categories : Array<ICategory>;
-    
     statistics: {
         hp: number;
         attack: number;

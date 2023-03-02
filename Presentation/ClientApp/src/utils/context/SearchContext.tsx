@@ -19,6 +19,7 @@ export const SearchParamsContext = createContext<ISearchParamsContext>({
 export const SearchParamsProvider = ({children}: IChildren) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const searchRef = useRef<HTMLInputElement>(null);
+    
     const setSearchParamsWithContext = (params: URLSearchParamsInit) => {
         setSearchParams(params);
     }

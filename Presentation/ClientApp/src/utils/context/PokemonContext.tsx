@@ -1,44 +1,40 @@
-﻿import {createContext, useContext, useEffect, useState} from "react";
-import {IPokemon} from "../interfaces/IPokemon";
-import axios from "axios";
-import {SearchParamsContext} from "./SearchContext";
+﻿import axios from "axios";
+import {createContext, useContext, useEffect, useState} from "react";
 import {IChildren} from "../interfaces/IChildren";
+import {IPokemon} from "../interfaces/IPokemon";
+import {SearchParamsContext} from "./SearchContext";
 
 export interface IPokemonContext {
     pokemons: Array<IPokemon>;
-    isLoading: boolean;
+    loading: boolean;
     error: any;
 }
 
 export const PokemonContext = createContext<IPokemonContext>({
     pokemons: [],
-    isLoading: true,
+    loading: true,
     error: null,
 });
 
 export const PokemonProvider = ({children}: IChildren) => {
     const [pokemons, setPokemons] = useState<Array<IPokemon>>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const {searchParams} = useContext(SearchParamsContext);
 
     async function fetchData() {
-        setIsLoading(true);
         try {
             const response = await axios.get("https://localhost:7085/Pokemon/All", {
                 params: {
                     name: searchParams.get("pokemon")
                 }
             });
-            if (response.status != 200) {
-                throw new Error("Failed to fetch data.");
-            }
             setPokemons(response.data);
         } catch (e: any) {
             console.log("Error fetching data");
             setError(error);
         } finally {
-            setIsLoading(false);
+            setLoading(false);
         }
     }
 
@@ -47,7 +43,7 @@ export const PokemonProvider = ({children}: IChildren) => {
     }, [searchParams.get("pokemon")])
 
     return (
-        <PokemonContext.Provider value={{pokemons, isLoading, error}}>
+        <PokemonContext.Provider value={{error, loading, pokemons}}>
             {children}
         </PokemonContext.Provider>
     )

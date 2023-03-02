@@ -11,8 +11,8 @@ function App() {
             <GlobalStyles/>
             <Header/>
             <Routes>
-                <Route index={true} element={Home()}/>
-                <Route path={"pokemon/:id/:name"} element={PokemonDetail()}/>
+                <Route index={true} element={<Home/>}/>
+                <Route path="pokemon/:name" element={<PokemonDetail/>}/>
             </Routes>
         </Fragment>
     )

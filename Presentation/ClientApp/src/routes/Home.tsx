@@ -4,18 +4,38 @@ import {useContext} from "react";
 import {PokemonContext} from "../utils/context/PokemonContext";
 
 export const Home = () => {
-    const {pokemons, isLoading, error} = useContext(PokemonContext);
+    const {pokemons, loading, error} = useContext(PokemonContext);
+
+    if (loading) {
+        return (
+            <S.HeroSection><p>Loading data...</p></S.HeroSection>
+        )
+    }
+
+    if (error) {
+        return (
+            <S.HeroSection>
+                <p>Error occured while fetching data from the server. Please try again later.</p>
+            </S.HeroSection>
+        )
+    }
+    
+    if(pokemons.length === 0){
+        return (
+            <S.HeroSection>
+                <p>No results</p>
+            </S.HeroSection>)
+    }
 
     return (
         <S.HomeLayout>
-            {isLoading ?
-                (<S.HeroSection><p>Loading data...</p></S.HeroSection>) : error ? (
-                    <S.HeroSection><p>Error fetching data:{error}</p></S.HeroSection>) : (pokemons.length > 0) ?
-                    <S.HeroSection>{pokemons?.map((value, index) => {
+            {pokemons &&
+                <S.HeroSection>
+                    {pokemons?.map((value, index) => {
                         return <Card key={value.id} pokemonData={value} listId={++index}/>;
-                    })}</S.HeroSection> : <S.HeroSection><p>No Results</p></S.HeroSection>
+                    })}
+                </S.HeroSection>
             }
-
         </S.HomeLayout>
     );
 };

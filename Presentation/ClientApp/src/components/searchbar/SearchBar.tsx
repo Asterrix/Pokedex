@@ -1,14 +1,18 @@
 import * as S from "./styles/SearchBarStyled"
-import {ChangeEvent, KeyboardEvent, useContext, useEffect, useRef, useState} from "react";
+import {ChangeEvent, KeyboardEvent, useContext, useEffect, useState} from "react";
 import {SearchParamsContext} from "../../utils/context/SearchContext";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 export const SearchBar = () => {
     const [query, setQuery] = useState(false);
     const {searchParams, setSearchParams, searchRef} = useContext(SearchParamsContext);
-
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearchParams({pokemon: e.target.value});
+        setTimeout(() => {
+            setSearchParams({pokemon: e.target.value});
+        }, 500)
     }
 
     const handleKeyboardPress = (k: KeyboardEvent<HTMLInputElement>) => {
@@ -19,9 +23,16 @@ export const SearchBar = () => {
             setSearchParams({});
             searchRef.current!.value = "";
         } else if (k.key === "Enter") {
+            if (location.search != "") {
+                navigate(`/${location.search}`, {replace:true})
+            }
             searchRef.current!.blur();
         }
     }
+
+    useEffect(() => {
+        console.log(location.search)
+    }, [location.search])
 
     useEffect(() => {
         if (searchRef) {
@@ -39,6 +50,7 @@ export const SearchBar = () => {
             setSearchParams({})
         }
     }, [searchParams.get("pokemon")?.length])
+
 
     return (
         <S.Container>
