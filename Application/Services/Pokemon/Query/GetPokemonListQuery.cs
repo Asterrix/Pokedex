@@ -5,9 +5,9 @@ using MediatR;
 
 namespace Application.Services.Pokemon.Query;
 
-public record GetPokemonListQuery(string Name) : IRequest<List<PokemonGetViewModel>>;
+public record GetPokemonListQuery(string Name) : IRequest<List<PokemonListGetViewModel>>;
 
-public class GetPokemonListQueryHandler : IRequestHandler<GetPokemonListQuery, List<PokemonGetViewModel>>
+public class GetPokemonListQueryHandler : IRequestHandler<GetPokemonListQuery, List<PokemonListGetViewModel>>
 {
     private readonly IPokemonRepository _pokemonRepository;
 
@@ -16,15 +16,14 @@ public class GetPokemonListQueryHandler : IRequestHandler<GetPokemonListQuery, L
         _pokemonRepository = pokemonRepository;
     }
 
-    public async Task<List<PokemonGetViewModel>> Handle(GetPokemonListQuery request,
-        CancellationToken cancellationToken)
+    public async Task<List<PokemonListGetViewModel>> Handle(GetPokemonListQuery request, CancellationToken cancellationToken)
     {
         if (request.Name == "")
         {
             var defaultList = await _pokemonRepository.GetAllPokemonAsync(cancellationToken);
             return PokemonMapper.ToPokemonGetViewModel(ref defaultList);
         }
-        
+
         var result = await _pokemonRepository.GetAllPokemonAsync(cancellationToken, request.Name.Trim());
 
         return PokemonMapper.ToPokemonGetViewModel(ref result);

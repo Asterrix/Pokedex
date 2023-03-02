@@ -8,10 +8,10 @@ namespace Application.Mapper;
 
 internal static class PokemonMapper
 {
-    internal static List<PokemonGetViewModel> ToPokemonGetViewModel(ref List<Pokemon> pokemons)
+    internal static List<PokemonListGetViewModel> ToPokemonGetViewModel(ref List<Pokemon> pokemons)
     {
-        var list = new List<PokemonGetViewModel>();
-        
+        var list = new List<PokemonListGetViewModel>();
+
         foreach (var pokemon in pokemons)
         {
             var p = pokemon;
@@ -19,20 +19,19 @@ internal static class PokemonMapper
 
             foreach (var categoryRelation in pokemon.Categories)
             {
-                categories.Add(new CategoryRelationViewModel(new CategoryViewModel(categoryRelation.Category.Id, categoryRelation.Category.Name)));;
+                categories.Add(new CategoryRelationViewModel(new CategoryViewModel(categoryRelation.Category.Id, categoryRelation.Category.Name))); ;
             }
-            
-            list.Add(ToPokemonGetViewModel(ref p, categories));
+
+            list.Add(ToPokemonListGetViewModel(ref p, categories));
         }
 
         return list;
     }
-    
+
     internal static PokemonGetViewModel ToPokemonGetViewModel(ref Pokemon pokemon)
     {
-        // var categories = new CategoryRelationViewModel(new List<CategoryViewModel>());
         var categories = new List<CategoryRelationViewModel>();
-        
+
         foreach (var categoryRelation in pokemon.Categories)
         {
             categories.Add(new CategoryRelationViewModel(new CategoryViewModel(categoryRelation.Category.Id, categoryRelation.Category.Name)));
@@ -41,9 +40,20 @@ internal static class PokemonMapper
         return ToPokemonGetViewModel(ref pokemon, categories);
     }
 
+    private static PokemonListGetViewModel ToPokemonListGetViewModel(ref Pokemon pokemon, List<CategoryRelationViewModel> categories)
+    {
+        var mapResult = new PokemonListGetViewModel(
+            Id: pokemon.Id,
+            Name: pokemon.Name,
+            Portrait: pokemon.Portrait,
+            Categories: categories
+        );
+        return mapResult;
+    }
+
     private static PokemonGetViewModel ToPokemonGetViewModel(ref Pokemon pokemon, List<CategoryRelationViewModel> categories)
     {
-        var mapResult = new PokemonGetViewModel( 
+        var mapResult = new PokemonGetViewModel(
             Id: pokemon.Id,
             Name: pokemon.Name,
             Portrait: pokemon.Portrait,

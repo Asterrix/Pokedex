@@ -17,12 +17,8 @@ public class PokemonRepository : IPokemonRepository
     public async Task<List<Pokemon>> GetAllPokemonAsync(CancellationToken cancellationToken, string? name = "")
     {
         var result = _context.Pokemons
-            .Include(x => x.Gender)
-            .Include(x => x.Generation)
-            .Include(x => x.Specie)
             .Include(x => x.Categories)
-            .ThenInclude(x => x.Category)
-            .Include(x => x.Statistics);
+            .ThenInclude(x => x.Category);
 
 
         if (name is null)
