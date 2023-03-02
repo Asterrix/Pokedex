@@ -10,9 +10,7 @@ export const SearchBar = () => {
     const navigate = useNavigate();
 
     const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
-        setTimeout(() => {
-            setSearchParams({pokemon: e.target.value});
-        }, 500)
+        setSearchParams({pokemon: e.target.value});
     }
 
     const handleKeyboardPress = (k: KeyboardEvent<HTMLInputElement>) => {
@@ -24,7 +22,7 @@ export const SearchBar = () => {
             searchRef.current!.value = "";
         } else if (k.key === "Enter") {
             if (location.search != "") {
-                navigate(`/${location.search}`, {replace:true})
+                navigate(`/${location.search}`, {replace: true})
             }
             searchRef.current!.blur();
         }

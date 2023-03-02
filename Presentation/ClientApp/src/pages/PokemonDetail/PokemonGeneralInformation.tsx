@@ -22,7 +22,7 @@ export const PokemonGeneralInformation = (p: IPokemonGeneralInformation) => {
         <S.Container>
             <S.InfoContainer>
                 <S.PortraitContainer>
-                    <img src={p.generalInfo.portrait} alt={""}/>
+                    <S.Portrait src={p.generalInfo.portrait} alt={`Portrait of ${p.generalInfo.name}`}/>
                 </S.PortraitContainer>
                 <S.Name>{p.generalInfo.name}</S.Name>
             </S.InfoContainer>
@@ -32,7 +32,7 @@ export const PokemonGeneralInformation = (p: IPokemonGeneralInformation) => {
             </S.Section>
             <S.Section>
                 <S.KeyParagraph>Specie:</S.KeyParagraph>
-                <S.ValueParagraph>{p.generalInfo.specie} Pokemon</S.ValueParagraph>
+                <S.ValueParagraph>{p.generalInfo.specie} Pokémon</S.ValueParagraph>
             </S.Section>
             <S.Section> 
                 <S.KeyParagraph>Type(s):</S.KeyParagraph>

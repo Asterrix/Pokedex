@@ -25,7 +25,7 @@ export const CardWrapper = styled.div<ICardStyled>`
   align-items: center;
   min-height: 100%;
   max-height: 100%;
-  padding: 2.4rem;
+  padding: 1.6rem;
 
   &:hover {
     scale: 1.05;
@@ -42,6 +42,10 @@ export const CardWrapper = styled.div<ICardStyled>`
     height: 100%;
     background-color: rgba(0, 0, 0, 0.1);
     z-index: 1;
+  }
+
+  @media only screen and (min-width: 500px) {
+   padding: 2.4rem;
   }
 `;
 
@@ -78,13 +82,14 @@ export const Category = styled.p<ICardStyled>`
 `
 
 export const PortraitContainer = styled.div`
-  position: relative;
-  height: 500px;
+  display: flex;
 `;
 
 export const Portrait = styled.img`
-  position: absolute;
-  top: 25%;
-  right: 0;
-  z-index: 99;
+  max-height: 192px;
+  z-index: 9;
+
+  @media only screen and (max-width: 500px) {
+    max-height: 120px;
+  }
 `

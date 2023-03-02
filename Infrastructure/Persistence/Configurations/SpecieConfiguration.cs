@@ -25,6 +25,7 @@ public class SpecieConfiguration : IEntityTypeConfiguration<Specie>
     {
         builder
             .Property(x => x.Name)
-            .HasColumnName("Specie");
+            .HasColumnName("Specie")
+            .IsRequired();
     }
 }

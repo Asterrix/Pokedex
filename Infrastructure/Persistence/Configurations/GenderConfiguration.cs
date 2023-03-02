@@ -14,5 +14,8 @@ public class GenderConfiguration : IEntityTypeConfiguration<Gender>
     private static void ConfigureIdFiled(EntityTypeBuilder<Gender> builder)
     {
         builder.HasKey(x => x.PokemonId);
+
+        builder.Property(x => x.PokemonId)
+            .HasColumnName("PokemonID");
     }
 }

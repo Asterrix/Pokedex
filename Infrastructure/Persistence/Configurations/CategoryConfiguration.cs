@@ -25,6 +25,8 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
         builder
             .Property(x => x.Name)
-            .HasColumnName("Category");
+            .HasColumnName("Category")
+            .HasMaxLength(12)
+            .IsRequired();
     }
 }

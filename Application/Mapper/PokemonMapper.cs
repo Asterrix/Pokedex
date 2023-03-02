@@ -19,7 +19,9 @@ internal static class PokemonMapper
 
             foreach (var categoryRelation in pokemon.Categories)
             {
-                categories.Add(new CategoryRelationViewModel(new CategoryViewModel(categoryRelation.Category.Id, categoryRelation.Category.Name))); ;
+                categories.Add(new CategoryRelationViewModel(new CategoryViewModel(categoryRelation.Category.Id,
+                    categoryRelation.Category.Name)));
+                ;
             }
 
             list.Add(ToPokemonListGetViewModel(ref p, categories));
@@ -34,7 +36,11 @@ internal static class PokemonMapper
 
         foreach (var categoryRelation in pokemon.Categories)
         {
-            categories.Add(new CategoryRelationViewModel(new CategoryViewModel(categoryRelation.Category.Id, categoryRelation.Category.Name)));
+            categories.Add(
+                new CategoryRelationViewModel(
+                    new CategoryViewModel(categoryRelation.Category.Id, categoryRelation.Category.Name)
+                )
+            );
         }
 
         return ToPokemonGetViewModel(ref pokemon, categories);

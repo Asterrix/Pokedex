@@ -9,6 +9,7 @@ public class CategoryRelationConfiguration : IEntityTypeConfiguration<CategoryRe
     public void Configure(EntityTypeBuilder<CategoryRelation> builder)
     {
         ConfigureIdField(builder);
+        ConfigurePokemonIdField(builder);
         ConfigureCategoryField(builder);
     }
 
@@ -19,7 +20,10 @@ public class CategoryRelationConfiguration : IEntityTypeConfiguration<CategoryRe
         builder
             .Property(x => x.Id)
             .HasColumnName("RelationID");
-        
+    }
+
+    private static void ConfigurePokemonIdField(EntityTypeBuilder<CategoryRelation> builder)
+    {
         builder
             .Property(x => x.PokemonId)
             .HasColumnName("PokemonID");

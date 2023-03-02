@@ -25,6 +25,7 @@ public class GenerationConfiguration : IEntityTypeConfiguration<Generation>
     {
         builder
             .Property(x => x.Name)
-            .HasColumnName("Generation");
+            .HasColumnName("Generation")
+            .IsRequired();
     }
 }
